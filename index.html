@@ -14,7 +14,7 @@
 .wall:after{content:"";position:absolute;width:250px;height:430px;border-radius:50%;background:linear-gradient(150deg,#77738188,transparent 70%);top:300px;right:-100px;filter:none}
 .status{position:absolute;top:11px;left:23px;right:23px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;z-index:8;direction:ltr}
 .dynamic{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:112px;height:31px;border-radius:22px;background:#000;z-index:9;box-shadow:0 0 0 1px #222}
-.lock{position:absolute;inset:0;z-index:5;text-align:center;padding-top:105px;display:flex;flex-direction:column;align-items:center;touch-action:none; -webkit-user-select:none; user-select:none}
+.lock{position:absolute;inset:0;z-index:5;text-align:center;padding-top:105px;display:flex;flex-direction:column;align-items:center}
 .lock .date{font-size:17px;color:#eee;margin-top:18px}.lock .clock{font-size:82px;font-weight:250;letter-spacing:-5px;line-height:1.08;text-shadow:0 2px 15px #0005}
 .lockhint{position:absolute;bottom:44px;font-size:13px;color:#eee;text-shadow:0 1px 5px #000;animation:pulse 2s infinite}
 @keyframes pulse{50%{opacity:.5}}
@@ -371,12 +371,12 @@
  <button class="wa-notification-close" onclick="dismissWaNotification(event)" aria-label="إزالة الإشعار">×</button>
 </div>
 <div class="status"><span id="statusTime">9:54 PM</span><span>▮▮▮　Wi‑Fi　🔋</span></div>
-<div class="lock" id="lock">
+<div class="lock" id="lock" style="display:flex">
 <div style="font-size:22px">⌑</div><div class="clock" id="clock">9:54 PM</div>
 <div class="lockhint">اسحبي للأعلى لفتح القفل</div><div class="flash">⌁</div><div class="cam">📷</div>
 </div>
-<div class="unlockpad" id="unlockpad"><div style="font-size:18px">أدخلي رمز الدخول</div><div class="dots" id="dots">○ ○ ○ ○</div><div class="keypad"><button onclick="digit(1)">1</button><button onclick="digit(2)">2</button><button onclick="digit(3)">3</button><button onclick="digit(4)">4</button><button onclick="digit(5)">5</button><button onclick="digit(6)">6</button><button onclick="digit(7)">7</button><button onclick="digit(8)">8</button><button onclick="digit(9)">9</button><button onclick="clearPin()">⌫</button><button onclick="digit(0)">0</button><button onclick="unlock()">✓</button></div><p class="smallnote">رمز تجريبي: 1234 — أو اضغطي ✓ للفتح</p></div>
-<div class="home" id="home">
+<div class="unlockpad" id="unlockpad" style="display:none"><div style="font-size:18px">أدخلي رمز الدخول</div><div class="dots" id="dots">○ ○ ○ ○</div><div class="keypad"><button onclick="digit(1)">1</button><button onclick="digit(2)">2</button><button onclick="digit(3)">3</button><button onclick="digit(4)">4</button><button onclick="digit(5)">5</button><button onclick="digit(6)">6</button><button onclick="digit(7)">7</button><button onclick="digit(8)">8</button><button onclick="digit(9)">9</button><button onclick="clearPin()">⌫</button><button onclick="digit(0)">0</button><button onclick="unlock()">✓</button></div><p class="smallnote">رمز تجريبي: 1234 — أو اضغطي ✓ للفتح</p></div>
+<div class="home" id="home" style="display:none">
 <div class="homehead"><span>📍 حفر الباطن</span><span>◉ ◉</span></div>
 <div class="appgrid" id="appgrid">
 <button class="app" onclick="openApp('WhatsApp')"><span class="ico icon-whatsapp wa-app-icon" style="background:#25D366">◔</span>WhatsApp</button>
@@ -400,7 +400,7 @@
 <div class="wa-top"><h2>WhatsApp</h2><div class="wa-top-actions"><span>⌕</span><span>＋</span><span>⋯</span></div></div>
 <div class="wa-search"><span>⌕</span><span>Search</span></div>
 <div class="wa-list" id="waList"></div>
-<div class="wa-compose-fab">＋</div>
+
 <div class="wa-tabs"><div class="wa-tab"><b>◉</b>Updates</div><div class="wa-tab"><b>☎</b>Calls</div><div class="wa-tab active"><b>▤</b>Chats</div><div class="wa-tab"><b>⚙</b>Settings</div></div>
 <div class="wa-bottom-home"></div>
 <div class="wa-important-alert" id="waImportantAlert"><div class="wa-important-card"><p>قمنقلع</p><button onclick="dismissImportantChat()">ابشر</button></div></div>
@@ -409,7 +409,6 @@
 <div class="wa-status"><span id="waChatTime">9:54</span><span>▮▮▮　Wi‑Fi　▰</span></div>
 <div class="wa-chat-header"><button class="wa-back" onclick="closeWaChat()">‹</button><div class="wa-header-avatar">MT</div><div class="wa-header-meta"><b>MT</b><small>tap here for group info</small></div><div class="wa-header-icons"><span>▣</span><span>☎</span><span>⋮</span></div></div>
 <div class="wa-chat-wall" id="waMessages"><div class="wa-day">TODAY</div></div>
-<div class="wa-inputbar"><span style="font-size:22px;color:#777">＋</span><input id="waMsgInput" placeholder="Message"><span style="font-size:20px;color:#777">▣</span><button onclick="sendWaMsg()">➤</button></div>
 <div class="wa-bottom-home"></div>
 </div>
 <div class="panel" id="panel"><div class="paneltop"><button class="back" onclick="goHome()">‹ الرئيسية</button><span id="panelTitle">التطبيق</span><span>•••</span></div><div id="panelContent"></div></div>
@@ -444,12 +443,7 @@ const waNotice=document.getElementById('waNotification');let noticeTouchX=0;
 waNotice.addEventListener('touchstart',e=>{noticeTouchX=e.touches[0].clientX},{passive:true});
 waNotice.addEventListener('touchend',e=>{if(Math.abs(e.changedTouches[0].clientX-noticeTouchX)>65)dismissWaNotification()},{passive:true});
 now();setInterval(now,60000);setInterval(()=>{let t=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});let a=document.getElementById('waTime'),b=document.getElementById('waChatTime');if(a)a.textContent=t;if(b)b.textContent=t;},60000);
-let startY=0;let lockPointerActive=false;const lockScreen=document.getElementById('lock');
-lockScreen.addEventListener('touchstart',e=>{if(e.touches&&e.touches.length){startY=e.touches[0].clientY;}},{passive:true});
-lockScreen.addEventListener('touchend',e=>{if(e.changedTouches&&e.changedTouches.length&&startY-e.changedTouches[0].clientY>20)showPin();},{passive:true});
-lockScreen.addEventListener('pointerdown',e=>{startY=e.clientY;lockPointerActive=true;});
-lockScreen.addEventListener('pointerup',e=>{if(lockPointerActive&&startY-e.clientY>20)showPin();lockPointerActive=false;});
-lockScreen.addEventListener('click',showPin);
+let startY=0;document.getElementById('lock').addEventListener('touchstart',e=>startY=e.touches[0].clientY);document.getElementById('lock').addEventListener('touchend',e=>{if(startY-e.changedTouches[0].clientY>35)showPin()});document.getElementById('lock').addEventListener('click',showPin);
 function showPin(){document.getElementById('unlockpad').style.display='flex'}
 function digit(n){if(pin.length<4)pin+=n;document.getElementById('dots').textContent='● '.repeat(pin.length)+'○ '.repeat(4-pin.length)}
 function clearPin(){pin=pin.slice(0,-1);document.getElementById('dots').textContent='● '.repeat(pin.length)+'○ '.repeat(4-pin.length)}
@@ -745,7 +739,42 @@ function openWaChat(){
  wall.scrollTop=wall.scrollHeight;
 }
 function closeWaChat(){document.getElementById('waChatView').style.display='none';document.getElementById('waScreen').style.display='flex';renderWaList();}
-function sendWaMsg(){return;});
+function sendWaMsg(){return;}
+const phoneCalls=[
+ {name:'أبو سعود',kind:'out',time:'2:41 ص',duration:'٤ دقائق'},
+ {name:'شونق',kind:'in',time:'1:58 ص',duration:'١٢ دقيقة'},
+ {name:'مندوب تايوان',kind:'missed',time:'1:22 ص',duration:''},
+ {name:'سطام',kind:'out',time:'11:36 م',duration:'دقيقتان'},
+ {name:'مندوب تايوان',kind:'missed',time:'9:14 م',duration:''},
+ {name:'النما',kind:'in',time:'7:52 م',duration:'٦ دقائق'},
+ {name:'راعي البقالة',kind:'out',time:'6:30 م',duration:'دقيقة'},
+ {name:'أبو فهده',kind:'in',time:'4:08 م',duration:'٩ دقائق'},
+ {name:'أبو سعود',kind:'missed',time:'12:17 م',duration:''},
+ {name:'شونق',kind:'out',time:'10:45 م',duration:'١٨ دقيقة'},
+ {name:'رقم غير معروف',kind:'in',time:'8:03 م',duration:'٣ دقائق'},
+ {name:'سطام',kind:'in',time:'5:26 م',duration:'دقيقة'},
+ {name:'جاسر',kind:'missed',time:'3:12 م',duration:''},
+ {name:'بناخي',kind:'out',time:'11:20 م',duration:'٥ دقائق'}
+];
+function renderPhoneApp(c){
+ c.innerHTML=`<div class="phone-app">
+  <div class="phone-heading">الأخيرة</div>
+  <div class="phone-filter"><span class="selected">الكل</span><span>الفائتة</span></div>
+  <div id="phoneCallList"></div>
+  <div class="phone-tabs"><span>المفضلة</span><span>الأخيرة</span><span>جهات الاتصال</span><span>لوحة المفاتيح</span><b>البريد الصوتي</b></div>
+ </div>`;
+ const list=document.getElementById('phoneCallList');
+ phoneCalls.forEach(call=>{
+  const missed=call.kind==='missed';
+  const icon=call.kind==='out'?'↗':call.kind==='in'?'↙':'↙';
+  const row=document.createElement('div');row.className='call-row';
+  row.innerHTML=`<div class="call-avatar">${escapeHtml(call.name.slice(0,1))}</div>
+   <div class="call-info"><div class="call-name ${missed?'':' '}">${escapeHtml(call.name)}</div>
+   <div class="call-meta ${missed?'missed':''}">${icon} ${missed?'مكالمة فائتة':call.kind==='out'?'صادرة':'واردة'} · ${call.time}</div></div>
+   <div class="call-kind ${missed?'missed':''}">${call.duration?'☎':''}　ⓘ</div>`;
+  row.addEventListener('click',()=>startPhoneCall(call));
+  list.appendChild(row);
+ });
 }
 function startPhoneCall(call){
  const c=document.querySelector('.phone-app');
