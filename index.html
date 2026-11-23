@@ -14,7 +14,7 @@
 .wall:after{content:"";position:absolute;width:250px;height:430px;border-radius:50%;background:linear-gradient(150deg,#77738188,transparent 70%);top:300px;right:-100px;filter:none}
 .status{position:absolute;top:11px;left:23px;right:23px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;z-index:8;direction:ltr}
 .dynamic{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:112px;height:31px;border-radius:22px;background:#000;z-index:9;box-shadow:0 0 0 1px #222}
-.lock{position:absolute;inset:0;z-index:5;text-align:center;padding-top:105px;display:flex;flex-direction:column;align-items:center}
+.lock{position:absolute;inset:0;z-index:5;text-align:center;padding-top:105px;display:flex;flex-direction:column;align-items:center;touch-action:none; -webkit-user-select:none; user-select:none}
 .lock .date{font-size:17px;color:#eee;margin-top:18px}.lock .clock{font-size:82px;font-weight:250;letter-spacing:-5px;line-height:1.08;text-shadow:0 2px 15px #0005}
 .lockhint{position:absolute;bottom:44px;font-size:13px;color:#eee;text-shadow:0 1px 5px #000;animation:pulse 2s infinite}
 @keyframes pulse{50%{opacity:.5}}
@@ -444,7 +444,12 @@ const waNotice=document.getElementById('waNotification');let noticeTouchX=0;
 waNotice.addEventListener('touchstart',e=>{noticeTouchX=e.touches[0].clientX},{passive:true});
 waNotice.addEventListener('touchend',e=>{if(Math.abs(e.changedTouches[0].clientX-noticeTouchX)>65)dismissWaNotification()},{passive:true});
 now();setInterval(now,60000);setInterval(()=>{let t=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});let a=document.getElementById('waTime'),b=document.getElementById('waChatTime');if(a)a.textContent=t;if(b)b.textContent=t;},60000);
-let startY=0;document.getElementById('lock').addEventListener('touchstart',e=>startY=e.touches[0].clientY);document.getElementById('lock').addEventListener('touchend',e=>{if(startY-e.changedTouches[0].clientY>35)showPin()});document.getElementById('lock').addEventListener('click',showPin);
+let startY=0;let lockPointerActive=false;const lockScreen=document.getElementById('lock');
+lockScreen.addEventListener('touchstart',e=>{if(e.touches&&e.touches.length){startY=e.touches[0].clientY;}},{passive:true});
+lockScreen.addEventListener('touchend',e=>{if(e.changedTouches&&e.changedTouches.length&&startY-e.changedTouches[0].clientY>20)showPin();},{passive:true});
+lockScreen.addEventListener('pointerdown',e=>{startY=e.clientY;lockPointerActive=true;});
+lockScreen.addEventListener('pointerup',e=>{if(lockPointerActive&&startY-e.clientY>20)showPin();lockPointerActive=false;});
+lockScreen.addEventListener('click',showPin);
 function showPin(){document.getElementById('unlockpad').style.display='flex'}
 function digit(n){if(pin.length<4)pin+=n;document.getElementById('dots').textContent='● '.repeat(pin.length)+'○ '.repeat(4-pin.length)}
 function clearPin(){pin=pin.slice(0,-1);document.getElementById('dots').textContent='● '.repeat(pin.length)+'○ '.repeat(4-pin.length)}
